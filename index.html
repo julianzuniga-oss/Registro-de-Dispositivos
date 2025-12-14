@@ -266,8 +266,8 @@
 </div>
 
 <script>
-    // URL de tu Google Apps Script (la misma API)
-    const API_URL = "https://script.google.com/macros/s/TU_SCRIPT_ID_AQUI/exec";
+    // ⚠️ REEMPLAZA CON TU URL DE APPS SCRIPT
+    const API_URL = "https://script.google.com/macros/s/AKfycbzWzqr1WXQBkNqlmSulE_2I9OUevG2PeNhYMkZwuhde7a3F3xgrtzT2wFlz-cBdvsufPA/exec";
     
     // Detectar información del dispositivo
     const ua = navigator.userAgent;
@@ -290,7 +290,7 @@
     else if (ua.indexOf("Mac") > -1) os = "macOS";
     document.getElementById('os').textContent = os;
     
-    // Calcular hash SHA-256 en el cliente
+    // Calcular hash SHA-256 en el cliente (solo para mostrar)
     async function calcularHash(texto) {
         const encoder = new TextEncoder();
         const data = encoder.encode(texto.trim().toLowerCase());
@@ -314,22 +314,12 @@
         const nombreDispositivo = document.getElementById('nombreDispositivo').value;
         const password = document.getElementById('passwordAdmin').value;
         
-        // Validar contraseña (cámbiala por la tuya)
-        const PASSWORD_CORRECTO = "admin2026"; // ⚠️ CAMBIA ESTO
-        
-        if (password !== PASSWORD_CORRECTO) {
-            resultado.style.display = 'block';
-            resultado.className = 'resultado-error';
-            resultado.textContent = '❌ Contraseña incorrecta';
-            return;
-        }
-        
         btnRegistrar.disabled = true;
         btnRegistrar.textContent = 'Registrando...';
         
         try {
-            // Aquí deberías llamar a tu API con un endpoint especial para registrar
-            const url = `${API_URL}?action=registrar&ua=${encodeURIComponent(ua)}&nombre=${encodeURIComponent(nombreDispositivo)}`;
+            // Llamar al endpoint de registro con la contraseña
+            const url = `${API_URL}?action=registrar&ua=${encodeURIComponent(ua)}&nombre=${encodeURIComponent(nombreDispositivo)}&password=${encodeURIComponent(password)}`;
             
             const response = await fetch(url);
             const data = await response.json();
