@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registrar Dispositivo - RNP</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #103960 0%, #1a5280 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+    
+    .container {
+        background: #ffffff;
+        border-radius: 20px;
+        max-width: 600px;
+        width: 100%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+    }
+    
+    .header {
+        background: linear-gradient(135deg, #103960 0%, #1a5280 100%);
+        padding: 30px;
+        text-align: center;
+        color: white;
+    }
+    
+    .header h1 {
+        font-size: 24px;
+        margin-bottom: 8px;
+    }
+    
+    .content {
+        padding: 40px 30px;
+    }
+    
+    .info-box {
+        background: #f0f8ff;
+        border-left: 4px solid #103960;
+        padding: 15px;
+        margin-bottom: 25px;
+        border-radius: 5px;
+    }
+    
+    .info-box h3 {
+        color: #103960;
+        margin-bottom: 8px;
+        font-size: 16px;
+    }
+    
+    .info-box p {
+        color: #555;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+    
+    .device-info {
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+    }
+    
+    .device-info h3 {
+        color: #103960;
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+    
+    .info-item {
+        margin-bottom: 12px;
+        font-size: 14px;
+    }
+    
+    .info-item strong {
+        color: #103960;
+        display: inline-block;
+        width: 120px;
+    }
+    
+    .info-item code {
+        background: #fff;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        color: #666;
+        word-break: break-all;
+    }
+    
+    .form-group {
+        margin-bottom: 25px;
+    }
+    
+    .form-group label {
+        display: block;
+        color: #333;
+        font-weight: 500;
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+    
+    .form-group input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: border-color 0.3s;
+    }
+    
+    .form-group input:focus {
+        outline: none;
+        border-color: #103960;
+    }
+    
+    .btn {
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(135deg, #103960 0%, #1a5280 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(16, 57, 96, 0.3);
+    }
+    
+    .btn:active {
+        transform: translateY(0);
+    }
+    
+    .btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+    }
+    
+    #resultado {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        font-size: 15px;
+        text-align: center;
+        display: none;
+    }
+    
+    .resultado-exito {
+        background: rgba(106, 219, 72, 0.15);
+        color: #2d7a1f;
+        border: 2px solid #6adb48;
+    }
+    
+    .resultado-error {
+        background: rgba(252, 0, 0, 0.15);
+        color: #c20000;
+        border: 2px solid #fc0000;
+    }
+    
+    .hash-preview {
+        font-size: 12px;
+        color: #999;
+        margin-top: 5px;
+        word-break: break-all;
+    }
+    
+    .warning {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 12px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        font-size: 13px;
+        color: #856404;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🔐 Registro de Dispositivo</h1>
+        <p>Sistema de Acreditación RNP Cali 2026</p>
+    </div>
+    
+    <div class="content">
+        <div class="info-box">
+            <h3>📱 Información del Sistema</h3>
+            <p>Este dispositivo será registrado en el sistema de seguridad usando un hash SHA-256. 
+            Solo este dispositivo exacto podrá realizar acreditaciones.</p>
+        </div>
+        
+        <div class="device-info">
+            <h3>Información Detectada</h3>
+            <div class="info-item">
+                <strong>Navegador:</strong> <span id="browser">Detectando...</span>
+            </div>
+            <div class="info-item">
+                <strong>Sistema:</strong> <span id="os">Detectando...</span>
+            </div>
+            <div class="info-item">
+                <strong>User-Agent:</strong><br>
+                <code id="ua-display">Cargando...</code>
+            </div>
+            <div class="info-item">
+                <strong>Hash SHA-256:</strong><br>
+                <code id="hash-display" class="hash-preview">Calculando...</code>
+            </div>
+        </div>
+        
+        <div class="warning">
+            ⚠️ <strong>Importante:</strong> Si actualizas tu navegador o sistema operativo, 
+            el User-Agent puede cambiar y necesitarás re-registrar el dispositivo.
+        </div>
+        
+        <form id="registroForm">
+            <div class="form-group">
+                <label for="nombreDispositivo">
+                    Nombre del Dispositivo *
+                    <span style="font-weight: normal; font-size: 12px; color: #666;">
+                        (ej: iPhone 11 de Juan, iPad del Staff, etc.)
+                    </span>
+                </label>
+                <input 
+                    type="text" 
+                    id="nombreDispositivo" 
+                    placeholder="iPhone 11 - Staff Principal"
+                    required
+                    maxlength="50"
+                >
+            </div>
+            
+            <div class="form-group">
+                <label for="passwordAdmin">Contraseña de Administrador *</label>
+                <input 
+                    type="password" 
+                    id="passwordAdmin" 
+                    placeholder="Ingresa la contraseña"
+                    required
+                >
+            </div>
+            
+            <button type="submit" class="btn" id="btnRegistrar">
+                🔒 Registrar Dispositivo
+            </button>
+        </form>
+        
+        <div id="resultado"></div>
+    </div>
+</div>
+
+<script>
+    // URL de tu Google Apps Script (la misma API)
+    const API_URL = "https://script.google.com/macros/s/TU_SCRIPT_ID_AQUI/exec";
+    
+    // Detectar información del dispositivo
+    const ua = navigator.userAgent;
+    document.getElementById('ua-display').textContent = ua;
+    
+    // Detectar navegador
+    let browser = "Desconocido";
+    if (ua.indexOf("Chrome") > -1) browser = "Chrome";
+    else if (ua.indexOf("Safari") > -1) browser = "Safari";
+    else if (ua.indexOf("Firefox") > -1) browser = "Firefox";
+    else if (ua.indexOf("Edge") > -1) browser = "Edge";
+    document.getElementById('browser').textContent = browser;
+    
+    // Detectar SO
+    let os = "Desconocido";
+    if (ua.indexOf("iPhone") > -1) os = "iOS (iPhone)";
+    else if (ua.indexOf("iPad") > -1) os = "iOS (iPad)";
+    else if (ua.indexOf("Android") > -1) os = "Android";
+    else if (ua.indexOf("Windows") > -1) os = "Windows";
+    else if (ua.indexOf("Mac") > -1) os = "macOS";
+    document.getElementById('os').textContent = os;
+    
+    // Calcular hash SHA-256 en el cliente
+    async function calcularHash(texto) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(texto.trim().toLowerCase());
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        return hashHex;
+    }
+    
+    // Mostrar hash
+    calcularHash(ua).then(hash => {
+        document.getElementById('hash-display').textContent = hash;
+    });
+    
+    // Manejar envío del formulario
+    document.getElementById('registroForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const btnRegistrar = document.getElementById('btnRegistrar');
+        const resultado = document.getElementById('resultado');
+        const nombreDispositivo = document.getElementById('nombreDispositivo').value;
+        const password = document.getElementById('passwordAdmin').value;
+        
+        // Validar contraseña (cámbiala por la tuya)
+        const PASSWORD_CORRECTO = "admin2026"; // ⚠️ CAMBIA ESTO
+        
+        if (password !== PASSWORD_CORRECTO) {
+            resultado.style.display = 'block';
+            resultado.className = 'resultado-error';
+            resultado.textContent = '❌ Contraseña incorrecta';
+            return;
+        }
+        
+        btnRegistrar.disabled = true;
+        btnRegistrar.textContent = 'Registrando...';
+        
+        try {
+            // Aquí deberías llamar a tu API con un endpoint especial para registrar
+            const url = `${API_URL}?action=registrar&ua=${encodeURIComponent(ua)}&nombre=${encodeURIComponent(nombreDispositivo)}`;
+            
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            resultado.style.display = 'block';
+            
+            if (data.estado === 'ok') {
+                resultado.className = 'resultado-exito';
+                resultado.innerHTML = '✅ <strong>Dispositivo registrado exitosamente</strong><br>' +
+                    'Ya puedes usar este dispositivo para acreditaciones.';
+                
+                // Limpiar formulario
+                document.getElementById('nombreDispositivo').value = '';
+                document.getElementById('passwordAdmin').value = '';
+            } else {
+                resultado.className = 'resultado-error';
+                resultado.innerHTML = '❌ <strong>Error:</strong> ' + (data.mensaje || 'No se pudo registrar');
+            }
+        } catch (error) {
+            resultado.style.display = 'block';
+            resultado.className = 'resultado-error';
+            resultado.textContent = '❌ Error de conexión: ' + error.message;
+        } finally {
+            btnRegistrar.disabled = false;
+            btnRegistrar.textContent = '🔒 Registrar Dispositivo';
+        }
+    });
+</script>
+</body>
+</html>
