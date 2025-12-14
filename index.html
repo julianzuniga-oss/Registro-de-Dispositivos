@@ -195,13 +195,13 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1>🔐 Registro de Dispositivo</h1>
+        <h1>Registro de Dispositivo</h1>
         <p>Sistema de Acreditación RNP Cali 2026</p>
     </div>
     
     <div class="content">
         <div class="info-box">
-            <h3>📱 Información del Sistema</h3>
+            <h3>Información del Sistema</h3>
             <p>Este dispositivo será registrado en el sistema de seguridad usando un hash SHA-256. 
             Solo este dispositivo exacto podrá realizar acreditaciones.</p>
         </div>
@@ -225,7 +225,7 @@
         </div>
         
         <div class="warning">
-            ⚠️ <strong>Importante:</strong> Si actualizas tu navegador o sistema operativo, 
+            <strong>Importante:</strong> Si actualizas tu navegador o sistema operativo, 
             el User-Agent puede cambiar y necesitarás re-registrar el dispositivo.
         </div>
         
@@ -257,7 +257,7 @@
             </div>
             
             <button type="submit" class="btn" id="btnRegistrar">
-                🔒 Registrar Dispositivo
+                Registrar Dispositivo
             </button>
         </form>
         
@@ -266,7 +266,7 @@
 </div>
 
 <script>
-    // ⚠️ REEMPLAZA CON TU URL DE APPS SCRIPT
+    // REEMPLAZA CON TU URL DE APPS SCRIPT
     const API_URL = "https://script.google.com/macros/s/AKfycbzWzqr1WXQBkNqlmSulE_2I9OUevG2PeNhYMkZwuhde7a3F3xgrtzT2wFlz-cBdvsufPA/exec";
     
     // Detectar información del dispositivo
@@ -328,7 +328,7 @@
             
             if (data.estado === 'ok') {
                 resultado.className = 'resultado-exito';
-                resultado.innerHTML = '✅ <strong>Dispositivo registrado exitosamente</strong><br>' +
+                resultado.innerHTML = '<strong>Dispositivo registrado exitosamente</strong><br>' +
                     'Ya puedes usar este dispositivo para acreditaciones.';
                 
                 // Limpiar formulario
@@ -344,7 +344,7 @@
             resultado.textContent = '❌ Error de conexión: ' + error.message;
         } finally {
             btnRegistrar.disabled = false;
-            btnRegistrar.textContent = '🔒 Registrar Dispositivo';
+            btnRegistrar.textContent = 'Registrar Dispositivo';
         }
     });
 </script>
